@@ -6,7 +6,7 @@ class Checkout
   attr_reader :basket, :basket_total
 
   def initialize
-    @basket = {}
+    @basket = []
     @price_list = Price_list.new.prices
   end
 
@@ -19,18 +19,19 @@ class Checkout
   end
 
   def sum_basket
-    @basket_total = @basket.values[2].inject(0){|sum, i| sum + i}.round(2)
+    @basket_total = basket.inject(0){|sum, hash| sum + hash[:value]}
   end
 
 
 
   private
   def add_item_to_basket(item)
-    item_details = []
-    item_details << item
-    item_details << @price_list.fetch(item)[0]
-    item_details << @price_list.fetch(item)[1]
-    @basket[@basket.size + 1] = item_details
+    item_details = {}
+    item_details[:basket_id] = basket.size + 1
+    item_details[:item_code] = item
+    item_details[:item] = @price_list.fetch(item)[0]
+    item_details[:value] = @price_list.fetch(item)[1]
+    @basket << item_details
   end
 
 end
