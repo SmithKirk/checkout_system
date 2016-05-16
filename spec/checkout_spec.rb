@@ -6,11 +6,6 @@ describe 'Checkout' do
   # let(:item){object_double(Item.new)}
 
   describe '#scan' do
-    xit 'scan adds item to basket' do
-      checkout.scan('001')
-      expect(checkout.basket).to include({1=> ["001", "Travel Card Holder",4.75]})
-    end
-
     it 'scan adds item to basket' do
       checkout.scan('001')
       expect(checkout.basket).to include(
@@ -29,8 +24,16 @@ describe 'Checkout' do
     it 'provides a total for items in basket' do
       checkout.scan('001')
       checkout.scan('002')
-      checkout.sum_basket
       expect(checkout.basket_total).to eq 49.75
+    end
+  end
+
+  describe '#pay' do
+    it 'calculates correct change' do
+      checkout.scan('001')
+      checkout.scan('002')
+      checkout.pay(50.00)
+      expect(checkout.payment[:change]).to eq 0.25
     end
   end
 end
