@@ -3,7 +3,6 @@ require 'checkout'
 describe 'Checkout' do
 
   subject(:checkout){Checkout.new}
-  # let(:item){object_double(Item.new)}
 
   describe '#scan' do
     it 'scan adds item to basket' do
@@ -12,7 +11,7 @@ describe 'Checkout' do
           {:basket_id => 1,
           :item_code => "001",
           :item => "Travel Card Holder",
-          :value => 4.75})
+          :value => 9.25})
     end
 
     it 'alerts user if item not found' do
@@ -24,7 +23,7 @@ describe 'Checkout' do
     it 'provides a total for items in basket' do
       checkout.scan('001')
       checkout.scan('002')
-      expect(checkout.basket_total).to eq 49.75
+      expect(checkout.basket_total).to eq 54.25
     end
   end
 
@@ -32,8 +31,17 @@ describe 'Checkout' do
     it 'calculates correct change' do
       checkout.scan('001')
       checkout.scan('002')
-      checkout.pay(50.00)
-      expect(checkout.payment[:change]).to eq 0.25
+      checkout.pay(60.00)
+      expect(checkout.payment[:change]).to eq 5.75
+    end
+  end
+
+  describe 'apply_discount' do
+    it 'travel card disount applied correctly' do
+      checkout.scan('001')
+      checkout.scan('001')
+      checkout.apply_discount('001')
+      expect(checkout.basket_total).to eq 17.00
     end
   end
 end
