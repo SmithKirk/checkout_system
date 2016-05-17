@@ -51,4 +51,32 @@ describe 'Checkout' do
       expect(checkout.basket_total).to eq 58.46
     end
   end
+
+  describe 'test baskets' do
+    it '001, 002, 003' do
+      checkout.scan('001')
+      checkout.scan('002')
+      checkout.scan('003')
+      checkout.over_60_disc
+      expect(checkout.basket_total).to eq 66.78
+    end
+
+    it '001, 003, 001' do
+      checkout.scan('001')
+      checkout.scan('003')
+      checkout.scan('001')
+      checkout.apply_discount('001')
+      expect(checkout.basket_total).to eq 36.95
+    end
+
+    it '001, 002, 001, 003' do
+      checkout.scan('001')
+      checkout.scan('002')
+      checkout.scan('001')
+      checkout.scan('003')
+      checkout.apply_discount('001')
+      checkout.over_60_disc
+      expect(checkout.basket_total).to eq 73.76
+    end
+  end
 end
