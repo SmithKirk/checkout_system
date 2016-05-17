@@ -48,6 +48,13 @@ class Checkout
     end
   end
 
+  def over_60_disc
+    if @basket_total > 60.00
+      @basket_total *= 0.9
+      @basket_total = @basket_total.round(2)
+    end
+  end
+
   private
   def add_item_to_basket(item)
     item_details = {}

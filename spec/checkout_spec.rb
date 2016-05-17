@@ -43,5 +43,12 @@ describe 'Checkout' do
       checkout.apply_discount('001')
       expect(checkout.basket_total).to eq 17.00
     end
+
+    it 'baskets over £60 get 10% off' do
+      checkout.scan('002')
+      checkout.scan('003')
+      checkout.over_60_disc
+      expect(checkout.basket_total).to eq 58.46
+    end
   end
 end
