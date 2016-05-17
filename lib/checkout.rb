@@ -32,6 +32,11 @@ class Checkout
     @payment[:change] = @payment[:tender] - @basket_total
   end
 
+  def clear_basket
+    @basket = []
+    sum_basket
+  end
+
   def apply_discount(item_code)
     counts = Hash.new 0
     basket.each{|item| counts[item[:item_code]] += 1}

@@ -36,7 +36,23 @@ describe 'Checkout' do
     end
   end
 
-  describe 'apply_discount' do
+  describe '#clear_basket' do
+    it 'removes items from basket' do
+      checkout.scan('001')
+      checkout.scan('002')
+      checkout.clear_basket
+      expect(checkout.basket).to eq []
+    end
+
+    it 'basket total should be 0' do
+      checkout.scan('001')
+      checkout.scan('002')
+      checkout.clear_basket
+      expect(checkout.basket_total).to eq 0
+    end
+  end
+
+  describe '#apply_discount' do
     it 'travel card disount applied correctly' do
       checkout.scan('001')
       checkout.scan('001')
