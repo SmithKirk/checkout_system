@@ -6,7 +6,7 @@ class Checkout
   # attr_reader :basket
 
   # initialize checkout with item code that has a promotion and the amount that
-  # triggers the promotion eg '001', 2
+  # triggers the promotion eg ('001', 2)
   def initialize(item_code, trigger)
     @basket = Basket.new
     @payment = {
@@ -43,7 +43,7 @@ class Checkout
       @basket.basket_total *= 0.9
       @basket.basket_total = @basket.basket_total.round(2)
     else
-      @basket.basket_total 
+      @basket.basket_total
     end
   end
 end
