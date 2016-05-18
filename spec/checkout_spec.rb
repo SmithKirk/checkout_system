@@ -2,7 +2,7 @@ require 'checkout'
 
 describe 'Checkout' do
 
-  subject(:checkout){Checkout.new('001')}
+  subject(:checkout){Checkout.new('001', 2)}
 
   describe '#pay' do
     it 'calculates correct change' do

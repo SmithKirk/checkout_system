@@ -31,7 +31,7 @@ describe 'Basket' do
     it 'travel card discount applied correctly' do
       basket.scan('001')
       basket.scan('001')
-      basket.apply_promo('001')
+      basket.apply_promo(2,'001')
       expect(basket.basket_total).to eq 17.00
     end
 
