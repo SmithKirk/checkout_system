@@ -1,73 +1,45 @@
-require_relative 'price_list'
+require_relative 'basket'
 
 class Checkout
 
   attr_writer :basket, :basket_total, :payment
   attr_reader :basket, :basket_total, :payment
 
-  def initialize
-    @basket = []
-    @price_list = Price_list.new.prices
+  def initialize(item_code)
+    @basket = Basket.new
     @payment = {
       tender: 0,
       change: 0
     }
+    @on_promo = item_code
   end
 
   def scan(item)
-    if @price_list.has_key?(item)
-      add_item_to_basket(item)
-    else
-      raise 'Warning item not found'
-    end
-    sum_basket
-  end
-
-  def sum_basket
-    @basket_total = basket.inject(0){|sum, hash| sum + hash[:value]}
+    @basket.scan(item)
   end
 
   def pay(amount)
     @payment[:tender] = amount
-    @payment[:change] = @payment[:tender] - @basket_total
+    @payment[:change] = @payment[:tender] - @basket.basket_total
   end
 
   def clear_basket
-    @basket = []
-    sum_basket
+    @basket.clear
   end
 
-  def apply_discount(item_code)
-    counts = Hash.new 0
-    basket.each{|item| counts[item[:item_code]] += 1}
-    if counts[item_code] >= 2
-      @basket.delete_if{|hash| hash[:item_code] == item_code}
-      counts[item_code].times{
-        item_details = {}
-        item_details[:basket_id] = basket.size + 1
-        item_details[:item_code] = item_code
-        item_details[:item] = @price_list.fetch(item_code)[0]
-        item_details[:value] = @price_list.fetch(item_code)[2]
-        @basket << item_details}
-        sum_basket
-    end
-  end
-
-  def over_60_disc
-    if @basket_total > 60.00
-      @basket_total *= 0.9
-      @basket_total = @basket_total.round(2)
-    end
+  def submit_basket(item_code = @on_promo)
+    @basket.apply_promo(item_code)
+    over_60_disc
   end
 
   private
-  def add_item_to_basket(item)
-    item_details = {}
-    item_details[:basket_id] = basket.size + 1
-    item_details[:item_code] = item
-    item_details[:item] = @price_list.fetch(item)[0]
-    item_details[:value] = @price_list.fetch(item)[1]
-    @basket << item_details
+
+  def over_60_disc
+    if @basket.basket_total > 60.00
+      @basket.basket_total *= 0.9
+      @basket.basket_total = @basket.basket_total.round(2)
+    end
   end
+
 
 end
